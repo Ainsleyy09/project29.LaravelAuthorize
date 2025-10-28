@@ -79,19 +79,19 @@ class AuthController extends Controller
                     'message' => 'Token not provided'
                 ], 400);
             }
-    
+
             JWTAuth::invalidate($token);
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Logout successfully',
             ], 200);
-    
+
         } catch(JWTException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Logout failed',
             ], 500);
         }
-    } 
+    }
 }

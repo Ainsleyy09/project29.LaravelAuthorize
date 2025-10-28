@@ -24,7 +24,7 @@ class CheckRole
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized'
-                ], 40);
+                ], 403);
             }
 
             return $next($request);

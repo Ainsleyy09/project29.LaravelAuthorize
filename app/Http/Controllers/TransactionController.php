@@ -49,7 +49,7 @@ class TransactionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'book_id' => 'required|exists:book,id',
-            'quantity' => 'required|integer|min:3'
+            'quantity' => 'required|integer|min:1'
         ]);
 
         if ($validator->fails()) {
@@ -163,5 +163,19 @@ class TransactionController extends Controller
             'success' => true,
             'message' => 'Transaction deleted successfully and stock updated!'
         ], 200);
+    }
+
+    public function myTransactions()
+    {
+        $user = auth('api')->user(); // customer yang login
+        $transactions = Transaction::with('book')
+            ->where('customer_id', $user->id)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Get My Transactions',
+            'data' => $transactions
+        ]);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,9 @@ Route::middleware(['auth:api'])->group(function () {
     //TRANSACTIONS
     Route::apiResource('/transactions', TransactionController::class)->only(['store', 'show']);
     Route::post('/transactions/{id}', [TransactionController::class, 'update']);
+    Route::get('/mytransactions', [TransactionController::class, 'myTransactions']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::middleware(['role:admin'])->group(function () {
         //BOOKS
@@ -23,15 +27,18 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/books/{id}', [BookController::class, 'update']);
 
         //GENRE
-        Route::apiResource('/genre', GenreController::class)->only(['store', 'destroy']);
-        Route::post('/genre/{id}', [GenreController::class, 'update']);
+        Route::apiResource('/genres', GenreController::class)->only(['store', 'destroy']);
+        Route::post('/genres/{id}', [GenreController::class, 'update']);
 
         //AUTHOR
-        Route::apiResource('/author', AuthorController::class)->only(['store', 'destroy']);
-        Route::post('/author/{id}', [AuthorController::class, 'update']);
+        Route::apiResource('/authors', AuthorController::class)->only(['store', 'destroy']);
+        Route::post('/authors/{id}', [AuthorController::class, 'update']);
 
         //TRANSACTION
         Route::apiResource('/transactions', TransactionController::class)->only(['index', 'destroy']);
+
+        //USERS
+        Route::apiResource('/users', UserController::class);
     });
 });
 
@@ -39,10 +46,10 @@ Route::middleware(['auth:api'])->group(function () {
 Route::apiResource('/books', BookController::class)->only(['index', 'show']);
 
 // GENRE
-Route::apiResource('/genre', GenreController::class)->only(['index', 'show']);
+Route::apiResource('/genres', GenreController::class)->only(['index', 'show']);
 
 //Author
-Route::apiResource('/author', AuthorController::class)->only(['index', 'show']);
+Route::apiResource('/authors', AuthorController::class)->only(['index', 'show']);
 
 //LOGIN & LOGOUT
 Route::post('/register', [AuthController::class, 'register']);
